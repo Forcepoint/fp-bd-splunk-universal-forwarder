@@ -1,4 +1,4 @@
-FROM splunk/universalforwarder:8.0.4.1
+FROM splunk/universalforwarder:8.2.0
 
 WORKDIR /app
 

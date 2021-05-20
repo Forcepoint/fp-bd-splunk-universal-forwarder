@@ -1,3 +1,4 @@
-deploy/splunkforwarder-8.0.5-a1a6394cc5ae-Linux-x86_64.tgz
-build/fp-splunk-universal-forwarder-v1.tar.gz
+deploy/splunkforwarder-*.tgz
+build/fp-splunk-universal-forwarder-*.tar.gz
+build/fp-splunk-universal-forwarder/
 .commands

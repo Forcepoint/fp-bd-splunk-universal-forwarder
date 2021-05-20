@@ -25,6 +25,12 @@ readonly _sourcetype_ngfw_monitor_type="${FP_SOURCETYPE_NGFW_MONITOR_TYPE:-"tcp"
 readonly _sourcetype_ngfw_monitor_value="${FP_SOURCETYPE_NGFW_MONITOR_VALUE:-8180}"
 readonly _sourcetype_ngfw_monitor_server_value="${FP_SOURCETYPE_NGFW_MONITOR_SERVER_VALUE:-""}"
 
+readonly _enable_casb_forward="${FP_ENABLE_CASB_FORWARD:-false}"
+readonly _sourcetype_casb="${FP_SOURCETYPE_CASB:-"cloud-access-security-broker"}"
+readonly _sourcetype_casb_monitor_type="${FP_SOURCETYPE_CASB_MONITOR_TYPE:-"directory"}"
+readonly _sourcetype_casb_monitor_value="${FP_SOURCETYPE_CASB_MONITOR_VALUE:-"/forcepoint-logs/casb"}"
+readonly _sourcetype_casb_monitor_server_value="${FP_SOURCETYPE_CASB_MONITOR_SERVER_VALUE:-""}"
+
 readonly _BOLD_WHITE='\033[1;37m'
 readonly _NO_COLOR='\033[0m'
 
@@ -141,6 +147,18 @@ ${__monitor_string_ngfw}
 disabled = false
 index = forcepoint
 sourcetype = ${_sourcetype_ngfw}
+
+EOF
+    fi
+
+    if test "${_enable_casb_forward}" = true; then
+        local -r __monitor_string_casb=$(get_monitor_string "${_sourcetype_casb_monitor_type}" "${_sourcetype_casb_monitor_value}" "${_sourcetype_casb_monitor_server_value}")
+        [ -z "${__monitor_string_casb}" ] && echo "Invalid Options - "${_sourcetype_casb_monitor_type}" "${_sourcetype_casb_monitor_value}" "${_sourcetype_casb_monitor_server_value}"" || cat <<EOF >>"${__config_file}"
+${__monitor_string_casb}
+disabled = false
+index = forcepoint
+sourcetype = ${_sourcetype_casb}
+blacklist = \.txt$
 
 EOF
     fi

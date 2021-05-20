@@ -38,6 +38,12 @@ export FP_ENABLE_CSG_FORWARD=true
 export FP_ENABLE_NGFW_FORWARD=true
 ```
 
+##### For CASB
+
+```bash
+export FP_ENABLE_CASB_FORWARD=true
+```
+
 ####	Replace the value parts with the SMC chosen forwarding port, and run the command below:
 
 ```bash
@@ -75,7 +81,7 @@ docker run --detach \
     --env "FP_ENABLE_PA_FORWARD=true" \
     --name fp-pa-splunk-universal-forwarder \
     --restart unless-stopped \
-    --volume FpPaLogsVolume:/app/forcepoint-logs:ro \
+    --volume FpLogsVolume:/app/forcepoint-logs:ro \
     fp-splunk-universal-forwarder
 ```
 
@@ -90,7 +96,7 @@ docker run --detach \
     --env "FP_ENABLE_CSG_FORWARD=true" \
     --name fp-csg-splunk-universal-forwarder \
     --restart unless-stopped \
-    --volume FpCsgLogsVolume:/app/forcepoint-logs:ro \
+    --volume FpLogsVolume:/app/forcepoint-logs:ro \
     docker.frcpnt.com/fp-splunk-universal-forwarder
 ```
 
@@ -110,6 +116,21 @@ docker run --detach \
     docker.frcpnt.com/fp-splunk-universal-forwarder
 ```
 
+#### Run the container with the following command (FP_SOURCETYPE=cloud-access-security-broker):
+
+```bash
+docker run --detach \
+    --env "SPLUNK_START_ARGS=--accept-license" \
+    --env "SPLUNK_PASSWORD=<universal-forwarder-password-of-your-choice>" \
+    --env "SPLUNK_INDEXER_IP_ADDRESS=<splunk-indexer-ip-address>" \
+    --env "SPLUNK_INDEXER_RECEIVING_PORT=<splunk-indexer-receiving-port>" \
+    --env "FP_ENABLE_CASB_FORWARD=true" \
+    --name fp-casb-splunk-universal-forwarder \
+    --restart unless-stopped \
+    --volume FpLogsVolume:/app/forcepoint-logs:ro \
+    docker.frcpnt.com/fp-splunk-universal-forwarder
+```
+
 #### Run all
 
 ```bash
@@ -120,10 +141,11 @@ docker run --detach \
     --env "SPLUNK_INDEXER_RECEIVING_PORT=<splunk-indexer-receiving-port>" \
     --env "FP_ENABLE_PA_FORWARD=true" \
     --env "FP_ENABLE_CSG_FORWARD=true" \
+    --env "FP_ENABLE_CASB_FORWARD=true" \
     --env "FP_ENABLE_NGFW_FORWARD=true" \
     --env "FP_SOURCETYPE_NGFW_MONITOR_VALUE=<smc-forwarding-port>" \
-    --name fp-products-splunk-universal-forwarder \ 
-    --publish <smc-forwarding-port>:<smc-forwarding-port> \ 
+    --name fp-products-splunk-universal-forwarder \
+    --publish <smc-forwarding-port>:<smc-forwarding-port> \
     --restart unless-stopped \
     --volume FpLogsVolume:/app/forcepoint-logs:ro \
     docker.frcpnt.com/fp-splunk-universal-forwarder
